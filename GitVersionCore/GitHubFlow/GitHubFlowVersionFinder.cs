@@ -1,6 +1,6 @@
 namespace GitVersion
 {
-    public class GitHubFlowVersionFinder
+    public class GitHubFlowVersionFinder : IVersionFinder
     {
         public SemanticVersion FindVersion(GitVersionContext context)
         {

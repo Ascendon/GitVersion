@@ -26,5 +26,8 @@
 
         [YamlAlias("next-version")]
         public string NextVersion { get; set; }
+
+        [YamlAlias("strategy")]
+        public string Strategy { get; set; }
     }
 }

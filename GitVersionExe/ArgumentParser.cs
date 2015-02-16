@@ -161,6 +161,12 @@ namespace GitVersion
                     continue;
                 }
 
+                if(IsSwitch("strategy", name))
+                {
+                    arguments.Strategy = value;
+                    continue;
+                }
+
                 if (IsSwitch("output", name))
                 {
                     OutputType outputType;

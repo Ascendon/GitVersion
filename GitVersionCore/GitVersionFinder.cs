@@ -10,14 +10,36 @@ namespace GitVersion
             Logger.WriteInfo("Running against branch: " + context.CurrentBranch.Name);
             EnsureMainTopologyConstraints(context);
 
-            if (ShouldGitHubFlowVersioningSchemeApply(context.Repository))
+            IVersionFinder versionFinder = BuildVersionFinder(context);
+            return versionFinder.FindVersion(context);
+        }
+
+        IVersionFinder BuildVersionFinder(GitVersionContext context)
+        {
+            if(context.Configuration.Strategy != null)
+            {
+                switch(context.Configuration.Strategy)
+                {
+                    case "GitFlow":
+                        Logger.WriteInfo("GitFlow version strategy will be used");
+                        return new GitFlowVersionFinder();
+                    case "GitHubFlow":
+                        Logger.WriteInfo("GitHubFlow version strategy will be used");
+                        return new GitHubFlowVersionFinder();
+                    default:
+                        throw new WarningException(string.Format("Invalid Strategy specified ({0}). Allowed values are: GitFlow, GitHubFlow or empty", context.Configuration.Strategy));
+                }
+            }
+            else if (ShouldGitHubFlowVersioningSchemeApply(context.Repository))
             {
                 Logger.WriteInfo("GitHubFlow version strategy will be used");
-                return new GitHubFlowVersionFinder().FindVersion(context);
+                return new GitHubFlowVersionFinder();
             }
-
-            Logger.WriteInfo("GitFlow version strategy will be used");
-            return new GitFlowVersionFinder().FindVersion(context);
+            else
+            {
+                Logger.WriteInfo("GitFlow version strategy will be used");
+                return new GitFlowVersionFinder();
+            }
         }
 
         static bool ShouldGitHubFlowVersioningSchemeApply(IRepository repo)
