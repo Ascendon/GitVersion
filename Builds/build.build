@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="Build" default="run" basedir=".."
+         xmlns="http://nant.sf.net/release/0.92/nant.xsd">
+  
+  <loadtasks assembly="C:\Program Files\CSG\DevTools\Lib\NAnt\Dev.NAnt.Tasks.dll" />
+  
+  <target name="run">
+    <nuget action="restore" />
+    <msbuild project="GitVersion.sln" />
+    
+    <!-- Rename package with CSG prefix -->
+    <xmlpoke file="NuGetExeBuild\GitVersion.Portable.nuspec" xpath="/nuspec:package/nuspec:metadata/nuspec:id" value="CSG.GitVersion.Portable">
+      <namespaces>
+        <namespace prefix="nuspec" uri="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd" />
+      </namespaces>
+    </xmlpoke>
+    <chocopack nuspec="NuGetExeBuild\GitVersion.Portable.nuspec" version="2.0.1" feed="csg.oss.chocolatey" />
+    <chocopush nupkgdir="Artifacts\Publish\csg.oss.chocolatey" apikey="${csg.oss.chocolatey.apikey}" source="${csg.oss.chocolatey.source}" />
+  </target>
+
+</project>
