@@ -20,6 +20,7 @@ namespace GitVersion
         public bool IsHelp;
         public string LogFilePath;
         public string VersionPart;
+        public string Strategy;
 
         public OutputType Output;
         
