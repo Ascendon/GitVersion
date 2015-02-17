@@ -88,6 +88,10 @@ namespace GitVersion
                 SemanticVersion semanticVersion;
                 var versionFinder = new GitVersionFinder();
                 var configuration = ConfigurationProvider.Provide(gitDirectory, fileSystem);
+                
+                if(arguments.Strategy != null)
+                    configuration.Strategy = arguments.Strategy;
+                
                 using (var repo = RepositoryLoader.GetRepo(gitDirectory))
                 {
                     var gitVersionContext = new GitVersionContext(repo, configuration);
