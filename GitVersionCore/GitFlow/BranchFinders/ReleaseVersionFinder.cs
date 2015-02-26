@@ -28,12 +28,6 @@ namespace GitVersion
 
         static void EnsureVersionIsValid(SemanticVersion version, Branch branch)
         {
-            if (version.Patch != 0)
-            {
-                var message = string.Format("Branch '{0}' doesn't respect the Release branch naming convention. A patch segment equals to zero is required.", branch.Name);
-                throw new WarningException(message);
-            }
-
         }
 
         static string GetSuffix(Branch branch)
